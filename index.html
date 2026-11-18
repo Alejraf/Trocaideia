@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Desafío IQ & Trivia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Outfit', 'sans-serif'] },
+                    colors: {
+                        darkBg: '#0b0f19',
+                        cardBg: '#131c31',
+                        accentBlue: '#3b82f6',
+                        accentPurple: '#8b5cf6',
+                        accentGold: '#f59e0b'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="h-full bg-darkBg text-slate-100 flex flex-col justify-between overflow-x-hidden font-sans select-none">
+
+    <!-- TOP APP BAR -->
+    <header class="w-full px-4 py-3 bg-cardBg/80 backdrop-blur-md border-b border-slate-800 flex justify-between items-center z-10">
+        <div class="flex items-center space-x-2">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-purple-500/30">
+                <i class="fa-solid fa-brain text-white text-sm"></i>
+            </div>
+            <div>
+                <span class="text-xs text-slate-400 block font-medium leading-none">NIVEL</span>
+                <span id="headerLevel" class="text-base font-bold text-white">1</span>
+            </div>
+        </div>
+        
+        <div class="flex items-center space-x-3">
+            <!-- Points Pill -->
+            <div class="bg-slate-900/80 border border-slate-700/60 px-3 py-1.5 rounded-full flex items-center space-x-1.5 shadow-inner">
+                <i class="fa-solid fa-coins text-accentGold text-sm"></i>
+                <span id="headerPoints" class="font-bold text-sm text-accentGold">0</span>
+            </div>
+            <!-- Energy Pill -->
+            <div class="bg-slate-900/80 border border-slate-700/60 px-3 py-1.5 rounded-full flex items-center space-x-1.5 shadow-inner">
+                <i class="fa-solid fa-bolt text-amber-400 text-sm animate-pulse"></i>
+                <span id="headerEnergy" class="font-bold text-sm text-amber-400">5/5</span>
+            </div>
+            <!-- Wallet Button -->
+            <button onclick="openWalletModal()" class="w-9 h-9 rounded-xl bg-emerald-600/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 hover:bg-emerald-600/30 transition">
+                <i class="fa-solid fa-wallet text-sm"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="flex-1 flex flex-col justify-center items-center p-4 max-w-md mx-auto w-full relative">
+
+        <!-- VIEW: HOME / WELCOME -->
+        <div id="homeView" class="w-full flex flex-col items-center text-center space-y-6 animate-fadeIn">
+            <div class="relative">
+                <div class="absolute -inset-1 rounded-3xl bg-gradient-to-r from-purple-600 to-blue-600 blur opacity-40"></div>
+                <div class="relative w-24 h-24 rounded-2xl bg-cardBg border border-slate-700 flex flex-col items-center justify-center shadow-2xl">
+                    <i class="fa-solid fa-graduation-cap text-4xl text-purple-400 mb-1"></i>
+                    <span class="text-[10px] font-bold tracking-widest bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full border border-amber-500/30">IQ PRO</span>
+                </div>
+            </div>
+
+            <div>
+                <h1 class="text-2xl font-extrabold text-white mb-2 tracking-tight">Desafío IQ & Trivia</h1>
+                <p class="text-sm text-slate-400 px-2">Responde preguntas de nivel progresivo, acumula puntos y canjéalos por dinero real vía PayPal o PIX.</p>
+            </div>
+
+            <div class="w-full bg-cardBg border border-slate-800/80 rounded-2xl p-4 text-left space-y-3 shadow-lg">
+                <div class="flex items-start space-x-3">
+                    <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">1</span>
+                    <p class="text-xs text-slate-300">Bloques de 3 preguntas por nivel. Cada respuesta correcta otorga puntos.</p>
+                </div>
+                <div class="flex items-start space-x-3">
+                    <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">2</span>
+                    <p class="text-xs text-slate-300">Gasta energía al responder. Al terminar un bloque, un anuncio natural recarga la siguiente ronda.</p>
+                </div>
+                <div class="flex items-start space-x-3">
+                    <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">3</span>
+                    <p class="text-xs text-slate-300">Acumula 1,000 puntos = $1.00 USD para retirar de forma segura.</p>
+                </div>
+            </div>
+
+            <button onclick="startGame()" class="w-full py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-base shadow-lg shadow-blue-600/30 transition transform active:scale-95 flex items-center justify-center space-x-2">
+                <span>Comenzar a Jugar</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+
+        <!-- VIEW: QUIZ GAME -->
+        <div id="quizView" class="w-full flex-col space-y-4 hidden animate-fadeIn">
+            <!-- Progress Bar -->
+            <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                <div id="progressBar" class="bg-gradient-to-r from-blue-500 to-indigo-500 h-full w-1/3 transition-all duration-300"></div>
+            </div>
+
+            <!-- Question Card -->
+            <div class="w-full bg-cardBg border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col justify-between min-h-[380px]">
+                <div>
+                    <div class="flex justify-between items-center mb-4">
+                        <span id="questionCounter" class="text-xs font-semibold text-purple-400 uppercase tracking-wider">Pregunta 1 de 3</span>
+                        <span id="questionCategory" class="text-xs bg-slate-800 text-slate-300 px-2.5 py-1 rounded-md font-medium">Lógica</span>
+                    </div>
+                    <h2 id="questionText" class="text-lg font-bold text-white mb-6 leading-snug">¿Cargando pregunta...</h2>
+                    
+                    <!-- Options List -->
+                    <div id="optionsContainer" class="space-y-3">
+                        <!-- Options generated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Next Button Container -->
+                <div id="quizActionContainer" class="mt-6 pt-4 border-t border-slate-800/80 hidden">
+                    <button onclick="nextQuestion()" class="w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-sm shadow-md transition flex items-center justify-center space-x-2">
+                        <span>Siguiente Pregunta</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW: MONETAG AD BREAK / BLOCK TRANSITION -->
+        <div id="adBreakView" class="w-full flex-col items-center justify-center text-center space-y-6 hidden animate-fadeIn py-8">
+            <div class="w-20 h-20 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-3xl shadow-lg">
+                <i class="fa-solid fa-rectangle-ad animate-bounce"></i>
+            </div>
+            <div>
+                <h2 class="text-xl font-bold text-white mb-2">Bloque completado</h2>
+                <p class="text-sm text-slate-400 px-4">Mostrando pausa publicitaria y preparando el siguiente bloque de preguntas...</p>
+            </div>
+            <div class="w-full bg-cardBg border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col items-center space-y-4">
+                <!-- Simulador de Banner / Intersticial Monetag -->
+                <div id="monetagAdContainer" class="w-full h-44 bg-slate-900 border border-slate-700/60 rounded-xl flex flex-col items-center justify-center relative overflow-hidden">
+                    <div class="absolute top-2 right-2 bg-slate-800 text-[10px] text-slate-400 px-2 py-0.5 rounded font-mono">Anuncio Monetag</div>
+                    <i class="fa-solid fa-bullhorn text-3xl text-purple-400 mb-2"></i>
+                    <p class="text-xs text-slate-300 font-medium">Patrocinador oficial</p>
+                    <p class="text-[11px] text-slate-500 mt-1">Soporta el desarrollo gratuito de la app</p>
+                </div>
+                <button id="resumeAfterAdBtn" onclick="resumeAfterAd()" disabled class="w-full py-3 rounded-xl bg-slate-700 text-slate-400 font-bold text-sm transition cursor-not-allowed">
+                    Continuando en <span id="adCountdown">3</span>s...
+                </button>
+            </div>
+        </div>
+
+        <!-- VIEW: LEVEL COMPLETED / REWARD -->
+        <div id="levelCompleteView" class="w-full flex-col items-center text-center space-y-6 hidden animate-fadeIn">
+            <div class="w-20 h-20 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 text-3xl shadow-xl shadow-emerald-500/20">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold text-white mb-1">¡Nivel Superado!</h2>
+                <p id="levelCompleteMessage" class="text-sm text-slate-400">Has respondido correctamente todas las preguntas de este nivel.</p>
+            </div>
+            <div class="w-full bg-cardBg border border-slate-800 rounded-2xl p-5 space-y-3 shadow-lg">
+                <div class="flex justify-between items-center text-sm">
+                    <span class="text-slate-400">Puntos ganados:</span>
+                    <span id="earnedPointsSummary" class="font-bold text-accentGold">+30 Puntos</span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                    <span class="text-slate-400">Energía actual:</span>
+                    <span id="energySummary" class="font-bold text-amber-400">5/5</span>
+                </div>
+            </div>
+            <button onclick="advanceLevel()" class="w-full py-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-base shadow-lg shadow-emerald-600/30 transition transform active:scale-95">
+                Siguiente Nivel 🚀
+            </button>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="w-full py-3 text-center text-xs text-slate-500 border-t border-slate-800/80">
+        IQ Master & Monetag System &copy; 2026. Todos los derechos reservados.
+    </footer>
+
+    <!-- WALLET MODAL -->
+    <div id="walletModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden animate-fadeIn">
+        <div class="w-full max-w-sm bg-cardBg border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-5">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-wallet text-emerald-400 text-lg"></i>
+                    <h3 class="text-lg font-bold text-white">Canjear Puntos</h3>
+                </div>
+                <button onclick="closeWalletModal()" class="w-8 h-8 rounded-lg bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 text-center space-y-1">
+                <span class="text-xs text-slate-400">Tus Puntos Totales</span>
+                <div class="text-2xl font-extrabold text-accentGold" id="modalPoints">0</div>
+                <span class="text-[11px] text-slate-500">Equivalente a <strong id="modalUsd" class="text-emerald-400">$0.00 USD</strong> (Mín: 1,000 pts)</span>
+            </div>
+
+            <div class="space-y-3">
+                <label class="block text-xs font-semibold text-slate-300">Método de Retiro</label>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="selectPaymentMethod('PayPal')" id="payPalBtn" class="py-2.5 px-3 rounded-xl border border-blue-500 bg-blue-600/20 text-blue-400 font-bold text-xs flex items-center justify-center space-x-2 transition">
+                        <i class="fa-brands fa-paypal"></i>
+                        <span>PayPal</span>
+                    </button>
+                    <button onclick="selectPaymentMethod('PIX')" id="pixBtn" class="py-2.5 px-3 rounded-xl border border-slate-700 bg-slate-800 text-slate-400 font-bold text-xs flex items-center justify-center space-x-2 transition">
+                        <i class="fa-solid fa-bolt"></i>
+                        <span>PIX (Brasil)</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="space-y-1.5">
+                <label id="paymentAccountLabel" class="block text-xs font-semibold text-slate-300">Correo de PayPal</label>
+                <input type="text" id="paymentAccountInput" placeholder="tucorreo@email.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
+            </div>
+
+            <button onclick="requestWithdrawal()" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-lg shadow-emerald-600/30 transition">
+                Solicitar Retiro
+            </button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT GAME LOGIC -->
+    <script>
+        // Game State
+        let state = {
+            level: 1,
+            points: 0,
+            energy: 5,
+            currentQuestionIndex: 0,
+            blockQuestionCount: 0, // 3 preguntas por bloque antes de anuncio
+            selectedMethod: 'PayPal'
+        };
+
+        // Preguntas de Trivia IQ Progresivas
+        const questionsDB = [
+            // Nivel 1
+            { level: 1, category: "Lógica", question: "¿Qué número continúa en la serie: 2, 4, 6, 8, ...?", options: ["9", "10", "12", "16"], correct: 1 },
+            { level: 1, category: "Matemáticas", question: "¿Cuánto es 15% de 200?", options: ["20", "25", "30", "35"], correct: 2 },
+            { level: 1, category: "Cultura General", question: "¿Cuál es el planeta más grande del Sistema Solar?", options: ["Saturno", "Júpiter", "Marte", "Neptuno"], correct: 1 },
+            // Nivel 2
+            { level: 2, category: "Razonamiento", question: "Si un mono sube 3 metros de un árbol de noche y baja 1 de día, ¿cuánto avanza en total tras 24 horas?", options: ["2 metros", "3 metros", "1 metro", "Depende"], correct: 0 },
+            { level: 2, category: "Matemáticas", question: "¿Cuál es la raíz cuadrada de 144?", options: ["10", "11", "12", "14"], correct: 2 },
+            { level: 2, category: "Ciencia", question: "¿Qué gas abunda más en la atmósfera de la Tierra?", options: ["Oxígeno", "Nitrógeno", "Dióxido de Carbono", "Hidrógeno"], correct: 1 },
+            // Nivel 3 en adelante (genera dinámicamente o cicla con mayor dificultad)
+            { level: 3, category: "Lógica IQ", question: "Si 5 máquinas tardan 5 minutos en hacer 5 piezas, ¿cuánto tardarían 100 máquinas en hacer 100 piezas?", options: ["100 min", "50 min", "5 min", "1 min"], correct: 2 },
+            { level: 3, category: "Historia", question: "¿En qué año comenzó la Primera Guerra Mundial?", options: ["1912", "1914", "1939", "1945"], correct: 1 },
+            { level: 3, category: "Geografía", question: "¿Cuál es el río más largo del mundo?", options: ["Nilo", "Amazonas", "Misisipi", "Yangtsé"], correct: 1 }
+        ];
+
+        let activeQuestions = [];
+
+        function updateUI() {
+            document.getElementById('headerLevel').innerText = state.level;
+            document.getElementById('headerPoints').innerText = state.points;
+            document.getElementById('headerEnergy').innerText = state.energy + '/5';
+            document.getElementById('modalPoints').innerText = state.points;
+            document.getElementById('modalUsd').innerText = '$' + (state.points / 1000).toFixed(2) + ' USD';
+        }
+
+        function startGame() {
+            if (state.energy <= 0) {
+                alert("¡No tienes energía! Espera a que se recargue o descansa un momento.");
+                return;
+            }
+            // Filtrar preguntas del nivel actual o general
+            activeQuestions = questionsDB.filter(q => q.level === Math.min(state.level, 3));
+            state.currentQuestionIndex = 0;
+            state.blockQuestionCount = 0;
+
+            document.getElementById('homeView').classList.add('hidden');
+            document.getElementById('quizView').classList.remove('hidden');
+            document.getElementById('quizView').classList.add('flex');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (state.currentQuestionIndex >= activeQuestions.length || state.blockQuestionCount >= 3) {
+                // Fin del bloque de 3 preguntas -> Mostrar Anuncio Monetag natural
+                triggerMonetagAdBreak();
+                return;
+            }
+
+            const q = activeQuestions[state.currentQuestionIndex];
+            document.getElementById('questionCounter').innerText = `Pregunta ${state.blockQuestionCount + 1} de 3 (Nivel ${state.level})`;
+            document.getElementById('questionCategory').innerText = q.category;
+            document.getElementById('questionText').innerText = q.question;
+
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+            document.getElementById('quizActionContainer').classList.add('hidden');
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full py-3.5 px-4 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 font-semibold text-sm text-left hover:border-purple-500/60 hover:bg-slate-800/80 transition flex justify-between items-center";
+                btn.innerHTML = `<span>${opt}</span><span class="w-6 h-6 rounded-full bg-slate-800 text-xs flex items-center justify-center text-slate-400 font-mono">${String.fromCharCode(65 + idx)}</span>`;
+                btn.onclick = () => selectOption(idx, q.correct, btn);
+                container.appendChild(btn);
+            });
+
+            // Actualizar barra de progreso del bloque
+            const progressPct = ((state.blockQuestionCount) / 3) * 100;
+            document.getElementById('progressBar').style.width = progressPct + '%';
+        }
+
+        function selectOption(selected, correct, btnElement) {
+            const buttons = document.getElementById('optionsContainer').children;
+            // Desactivar todos los botones
+            for (let b of buttons) {
+                b.disabled = true;
+                b.classList.add('opacity-70');
+            }
+
+            if (selected === correct) {
+                btnElement.classList.remove('bg-slate-900', 'border-slate-800');
+                btnElement.classList.add('bg-emerald-600/20', 'border-emerald-500', 'text-emerald-300');
+                state.points += 10; // +10 puntos por acierto
+            } else {
+                btnElement.classList.remove('bg-slate-900', 'border-slate-800');
+                btnElement.classList.add('bg-rose-600/20', 'border-rose-500', 'text-rose-300');
+                // Mostrar la correcta
+                buttons[correct].classList.remove('bg-slate-900', 'border-slate-800');
+                buttons[correct].classList.add('bg-emerald-600/20', 'border-emerald-500', 'text-emerald-300');
+            }
+
+            // Consumir energía por respuesta
+            if (state.energy > 0) state.energy--;
+            updateUI();
+
+            state.blockQuestionCount++;
+            state.currentQuestionIndex++;
+
+            // Mostrar botón siguiente o avanzar
+            document.getElementById('quizActionContainer').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            loadQuestion();
+        }
+
+        function triggerMonetagAdBreak() {
+            document.getElementById('quizView').classList.add('hidden');
+            document.getElementById('quizView').classList.remove('flex');
+            
+            document.getElementById('adBreakView').classList.remove('hidden');
+            document.getElementById('adBreakView').classList.add('flex');
+
+            // Temporizador de anuncio natural Monetag (3 segundos simulados de visualización de banner/intersticial)
+            let countdown = 3;
+            const btn = document.getElementById('resumeAfterAdBtn');
+            const countSpan = document.getElementById('adCountdown');
+            btn.disabled = true;
+            btn.className = "w-full py-3 rounded-xl bg-slate-700 text-slate-400 font-bold text-sm transition cursor-not-allowed";
+
+            const timer = setInterval(() => {
+                countdown--;
+                countSpan.innerText = countdown;
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    btn.disabled = false;
+                    btn.className = "w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-sm shadow-lg shadow-purple-600/35 transition cursor-pointer";
+                    btn.innerHTML = "Continuar Partida 🚀";
+                }
+            }, 1000);
+        }
+
+        function resumeAfterAd() {
+            document.getElementById('adBreakView').classList.add('hidden');
+            document.getElementById('adBreakView').classList.remove('flex');
+
+            // Verificar si completó el nivel (bloque de 3 preguntas) o pasa a nivel superior
+            if (state.blockQuestionCount >= 3) {
+                showLevelComplete();
+            } else {
+                document.getElementById('quizView').classList.remove('hidden');
+                document.getElementById('quizView').classList.add('flex');
+                loadQuestion();
+            }
+        }
+
+        function showLevelComplete() {
+            document.getElementById('levelCompleteMessage').innerText = `¡Excelente! Has completado el bloque del nivel ${state.level} y ganado puntos.`;
+            document.getElementById('earnedPointsSummary').innerText = `+30 Puntos`;
+            document.getElementById('energySummary').innerText = state.energy + '/5';
+
+            document.getElementById('levelCompleteView').classList.remove('hidden');
+            document.getElementById('levelCompleteView').classList.add('flex');
+        }
+
+        function advanceLevel() {
+            state.level++;
+            state.energy = Math.min(5, state.energy + 2); // Pequeña recarga al subir de nivel
+            updateUI();
+
+            document.getElementById('levelCompleteView').classList.add('hidden');
+            document.getElementById('levelCompleteView').classList.remove('flex');
+
+            document.getElementById('homeView').classList.remove('hidden');
+        }
+
+        // Wallet Modal Logic
+        function openWalletModal() {
+            updateUI();
+            document.getElementById('walletModal').classList.remove('hidden');
+        }
+
+        function closeWalletModal() {
+            document.getElementById('walletModal').classList.add('hidden');
+        }
+
+        function selectPaymentMethod(method) {
+            state.selectedMethod = method;
+            const paypalBtn = document.getElementById('payPalBtn');
+            const pixBtn = document.getElementById('pixBtn');
+            const label = document.getElementById('paymentAccountLabel');
+            const input = document.getElementById('paymentAccountInput');
+
+            if (method === 'PayPal') {
+                paypalBtn.className = "py-2.5 px-3 rounded-xl border border-blue-500 bg-blue-600/20 text-blue-400 font-bold text-xs flex items-center justify-center space-x-2 transition";
+                pixBtn.className = "py-2.5 px-3 rounded-xl border border-slate-700 bg-slate-800 text-slate-400 font-bold text-xs flex items-center justify-center space-x-2 transition";
+                label.innerText = "Correo de PayPal";
+                input.placeholder = "tucorreo@email.com";
+            } else {
+                pixBtn.className = "py-2.5 px-3 rounded-xl border border-emerald-500 bg-emerald-600/20 text-emerald-400 font-bold text-xs flex items-center justify-center space-x-2 transition";
+                paypalBtn.className = "py-2.5 px-3 rounded-xl border border-slate-700 bg-slate-800 text-slate-400 font-bold text-xs flex items-center justify-center space-x-2 transition";
+                label.innerText = "Clave PIX (CPF, Teléfono o Email)";
+                input.placeholder = "Tu clave PIX";
+            }
+        }
+
+        function requestWithdrawal() {
+            if (state.points < 1000) {
+                alert("Necesitas al menos 1,000 puntos ($1.00 USD) para solicitar un retiro.");
+                return;
+            }
+            const account = document.getElementById('paymentAccountInput').value.trim();
+            if (!account) {
+                alert("Por favor ingresa tu cuenta de pago (" + state.selectedMethod + ").");
+                return;
+            }
+            alert(`¡Solicitud de retiro enviada con éxito!
+
+Método: ${state.selectedMethod}
+Cuenta: ${account}
+Monto: $${(state.points/1000).toFixed(2)} USD
+
+Tu pago será procesado en 24-48 horas.`);
+            state.points = 0;
+            updateUI();
+            closeWalletModal();
+        }
+
+        updateUI();
+    </script>
+</body>
+</html>
